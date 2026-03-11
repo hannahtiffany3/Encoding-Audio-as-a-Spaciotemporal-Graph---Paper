@@ -9,15 +9,15 @@
 %path to figures - \usepackage{graphicx} is included in preamble.tex
 \graphicspath{{figures/}}
 
-\title{CSCI 693 Paper Template\footnote{CSCI 693 Research Methods in Computer Science, Spring 2026}}
+\title{Encoding Audio as a Spaciotemporal Graph\footnote{CSCI 693 Research Methods in Computer Science, Spring 2026}}
 
 \author{
-  Student Name\affmark[1], Shelley Wong\affmark[2]\\
-  \affmark[1]Computer Information Systems\\
+  Student Name\affmark[1], Hannah Tiffany\affmark[2]\\
+  \affmark[1]Computer Science\\
   \affmark[2]Computer Science Department\\
   California State University, Chico\\
   Chico, CA 95929\\
-  \email{\{student,swong26\}@csuchico.edu}
+  \email{\{student,hltiffany\}@csuchico.edu}
 }
 
 \begin{document}
@@ -39,20 +39,21 @@ Please check out the source code of this document for details.
 Write clearly and simply in the third person for an audience that is well-grounded in computing, but who may have limited exposure or knowledge about the specific topic of your paper. Define any technical terms deemed to require clarification when they are introduced.
 
 \section{Introduction}
-Use sections and subsections to guide the reader. If the section title shown contains an "or", you may choose to use either name (do not use both). You may adapt the subsections as needed.
+This section will introducte important concepts and definitions related to this research. This research was motivated by the goal of preparing a temporal graph that enocdes an audio signal, which can be easily transformed and reconstructed.
 
 \subsection{Context and Background}
-Present general information on the topic. Highlight the broader context and relevance of the research.
+Digital signal processing (DSP) is an important aspect of audio and video engineering. DSP techniques are used to convert analog signals into digital signals. Graph signal processing (GSP) is a type of DSP that uses graphs to encode and transform the signal. GSP has important applications in fields such as biology, networks, and neuroscience.
+GSP also has applications in the field of audio engineering. Encoding audio as a graph has been an important topic of research for many years. A key aspect of signal processing is the Fourier transform. The Fourier transform is used to decompose a sinusoid into its frequencies. The Short-Time Fourier transform is an adapted version that computes the transform on overlapping time intervals. It is best used for signals whose frequencies are not stationary, but change over time. This makes it an appropriate choice for an audio signal. The result of this transform is frequency “bins” at multiple time intervals.
 
 \subsection{Problem Statement and Research Question}
-Clearly state the gap in knowledge or the problem your study addresses. Articulate the main research question(s) or hypothesis/hypotheses.
+The goal of this paper is to explore a method of audio signal encoding on a graph for audio engineering. This encoding allows for graph-based transformations on the audio signal for processing or compression. Using the STFT, at each time interval, a frequency graph can be constructed. Each node represents a frequency component, and edges between local nodes are weighted with normalized amplitude-product coupling to encode energy strength between frequencies. A spaciotemporal graph can be constructed from each of these components, where time is encoded by temporal edges, and frequency energy strength is encoded with spatial edges.
+
 
 \subsection{Significance of the Study}
-Explain why your research is necessary or valuable. Discuss theoretical, practical, or policy implications.
+This paper is impactful in that it introduces a novel approach to graph audio processing by making use of the STFT to encode the dynamic aspect of the audio signal.
 
 \subsection{Scope and Organization}
-Briefly outline what the reader can expect in the upcoming sections.
-
+The next section of this paper will summarize the current literature avaliable in this field. Next, the methodology and of this study will be explained, including the research design and data collection methods. The results and implications of the study will be summarized in the next sections. 
 
 \section{Literature Review}
 Sometimes it may be helpful to use lists. Lists are easy to create in  \LaTeX\ whether they are ordered, unordered, or
