@@ -57,17 +57,83 @@ This paper is impactful in that it uses graph signal processing and graph embedd
 The next section of this paper will summarize the current literature avaliable in this field. Next, the methodology and of this study will be explained, including the research design and data collection methods. Finally, the results and implications of the study will be summarized. 
 
 \section{Literature Review}
-Sometimes it may be helpful to use lists. Lists are easy to create in  \LaTeX\ whether they are ordered, unordered, or
-nested as shown in the following example.
+Much research has been done into graph signal processing, dynamic graphs, and audio classification. However, no significant research has combined all three. The sources used in this project will explore these fields separately to provide the background information necessary to understand the
+project. The sources also provide a motivation for the project, as many reference audio as an important
+application of GSP. Audio classification is a well-established field that has been researched for years. The works most relevant to this project are covered here.
 
 \begin{itemize}[noitemsep]
-  \item Overview of Existing Research
-  \item Critical Evaluation
+  \item The article "Graph Signal Processing: History, development, impact, and outlook" was written by
+        professors G. Leus, A. G. Marques, J. M. F. Moura, A. Ortega, and D. I. Shuman. It was published in the
+        Signal Processing Magazine in 2023. This paper is an introduction to the field of graph signal
+        It presents multiple approaches to GSP, with references and theoretical background. It ends
+        with a description of the value and impact of GSP in multiple fields. This paper argues that GSP is an
+        important and relevant field with multiple use cases and applications. It supports the argument with a
+        thorough introduction and overview of the field, supported by multiple credible references. Although it
+        does not directly address audio signal processing with graphs, many of the key ideas are still relevant and
+        applicable. This text acts as a motivator for the project and provides the necessary background
+        information to understand GSP.
 \end{itemize}
 
 \begin{enumerate}[noitemsep]
-  \item Theoretical Framework (If Applicable)
-  \item Research Gap and Rationale
+  \item A second paper exploring graph signal processing is "The emerging field of signal processing on
+        graphs: Extending high-dimensional data analysis to networks and other irregular domains," published by
+        D. I. Shuman, S. K. Narang, P. Frossard, A. Ortega and P. Vandergheynst in IEEE Signal Processing
+        Magazine in 2013. Although this source is outdated, many of the concepts and applications are still
+        beneficial for the sake of this research project. It is a credible source with reliable information, and
+        continues to be a valuable resource. The main section of this paper covers principles in the field, including 
+        Fourier transforms, Laplacian and matrix representation, filtering, convolution, translation, modulation and 
+        dilation, graph transforms, and challenges. It ends with an overview of open questions.
+\end{enumerate}
+
+\begin{enumerate}[noitemsep]
+  \item The field of audio classification has been researched for years, mainly with machine learning 
+        techniques. The paper “Content Analysis for Audio Classification and Segmentation” by Lie Lu, 
+        Hong-Jiang Zhang and Hao Jiang in 2002 presents a method for audio classification as speech, 
+        music, environmental sound, or silence. It was published by the peer-reviewed magazine IEEE 
+        Transactions on Speech and Audio Processing. This paper aims to classify the type of audio 
+        and segment speech audio based on the speaker. The paper uses the K-Nearest Neighbors (KNN) 
+        algorithm applied to the zero-crossing rate of a frame to differentiate between different 
+        types of signals. Speech signals often display a pattern of alternating voiced and unvoiced 
+        sounds that music signals do not, which can be identified by the KNN. Silence can be determined 
+        by an average short-time energy and a zero-crossing rate lower than a given threshold. 
+        Discriminating music and environmental sounds can be achieved with band periodicity, spectrum 
+        flux, and noise frame ratio. Segmentation is achieved using Linear Spectral Pairs to 
+        discriminate between two speakers. The final results found that this method worked well for 
+        discriminating between music, speech, and environmental noises. Speaker discrimination worked 
+        fairly well, but struggled to detect the same speaker in different environments. 
+\end{enumerate}
+
+\begin{enumerate}[noitemsep]
+  \item Genre classification has also been improved with machine learning methods. The paper “Genre 
+        Classification Empowered by Knowledge-Embedded Music Representation” by H. Ding, L. Zhai, C. 
+        Zhao, F. Wang, G. Wang, and W. Xi published by IEEE in 2024, uses a knowledge graph for 
+        genre classification. The knowledge graph is propagated by machine learning models to build 
+        a relationship-aware audio framework to classify music genres. Multiple partition strategies 
+        are used to divide the graph into its different genres. The results showed superiority over 
+        many existing frameworks.
+\end{enumerate}
+
+\begin{enumerate}[noitemsep]
+  \item Recently, audio classification and recognition has found much improvement from leveraging
+        machine learning and neural networks. The paper "Graph-Based Audio Classification Using
+        Pre-Trained Models and Graph Neural Networks" by A. E. Castro-Ospina, M. A. Solarte-Sanchez,
+        L. S. Vega-Escobar, C. Isaza, and J. D. Martinez-Vargas explores how graph neural nets can
+        improve audio classification. The proposed methodology uses pre-trained models
+        designed to extract deep features from audio files, which are used as nodes to build a grpah.
+        These are then used to train graph neural networks. The paper tests mutliple diferent kinds of
+        GNNs. The end results found that the models performed with between  
+\end{enumerate}
+
+\begin{enumerate}[noitemsep]
+  \item 	Comparing the similarity between graphs with different numbers of nodes is most easily 
+  achieved with Graph2Vec embeddings, first presented in the paper “graph2vec: Learning Distributed
+   Representations of Graphs” by A. Narayanan, M. Chandramohan, R. Venkatsean, L. Chen, Y. Liu and 
+   S. Jaiswal. The paper presents a machine learning model that can transform a graph into a vector 
+   of fixed size. The paper introduces the need for graph2vec as a method to compress graphs to a 
+   fixed size to be used with kernels for graph comparisons. It builds upon other similar embedding 
+   frameworks, such as word2vec, by viewing a graph as an entire document, and the nodes as words. 
+   The paper concludes that graph2vec is an effective method to embed graphs to reveal the 
+   substructure and important characteristics of the graph. 
 \end{enumerate}
 
 \begin{enumerate}[noitemsep]
@@ -95,16 +161,9 @@ nested as shown in the following example.
 \section{Methodology (or Materials and Methods)}
 
 \subsection{Research Design}
-Describe whether the study is experimental, correlational, qualitative, mixed methods, etc.
-
-Participants and Setting: Detail demographic information (if relevant). Specify the sampling method (probability, purposive, convenience, etc.).
-
-Data Collection Methods: Explain instruments (e.g., surveys, interview protocols, laboratory equipment) and procedures. Justify your choices and address reliability and validity.
-
-Data Analysis Techniques: Describe statistical tests, qualitative coding strategies, or computational models used. Justify why these analyses are appropriate for your data.
-
-\subsection{Ethical Considerations}
-Note institutional review board (IRB) approval if required. Describe how you ensured confidentiality, consent, and data protection.
+This research is an experimental study to classify sound through graph community detection. The nodes of the graph will be composed of i audio samples, ai. Audio samples are sourced from FreeSound, a website of open-source audio samples available for download. For this research, audio, speech, and environmental sounds were used. Each audio sample is represented by a feature vector zi, which comprises the node features. Feature vectors are learned through audio embedding via Contrasive Language-Audio Pretraining (CLAP), a pre-trained neural network for audio to vector embedding. Using a pretrained neural network was determined to be the best choice for this project, because building and developing a new neural network is not the focus of the research and is outside the scope of the project. Simpler methods which do not require a neural network were considered, such as the log-mel spectogram averaged over time, but this would not be nearly as robust. An audio embedding from a neural network gives the best representation of the audio sample by capture timbre, texture, semantic similarity, and some temporal structure. It is also less sensitive to noise, time shifts, and small spectral variations. CLAP was chosen over other models because it was trained on large audio datasets containing multiple different kinds of audio, including the three used in this project (speech, environmental sounds, and music). It is a good choice for similarity detection because it also learns and embeds semantic similartiy.
+A kNN graph is built by connecting each audio sample to it’s top k nearest neighbors, evaluated on cosine similarity. Cosine similarity measures the angle between vectors, which represents similarity between audio embeddings. Magnitude is often arbitrary and noisy, thus is not a necessary measurement. For this project, values of k will be 5, 10, and 20. Edges will only be added if they have a similarity score above 0.6. This limits the edges of audio embeddings that are dissimilar from the rest of the dataset. 0.6 was chosen as the threshold because it encodes moderate similarity.
+After the graph is built, community detection is used to determine how the graph groups audio signals from the embedding.
 
 \subsection{Code Listings}
 Short, relevant code snippets or pseudocode can be included inline if they are important for enhancing understanding, provided they are well-formatted and clearly labeled. Commands from \texttt{listings} package allow you to display code easily with customizable coloring and styling rules. Here is an example.
