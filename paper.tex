@@ -9,7 +9,7 @@
 %path to figures - \usepackage{graphicx} is included in preamble.tex
 \graphicspath{{figures/}}
 
-\title{Encoding Audio as a Spaciotemporal Graph\footnote{CSCI 693 Research Methods in Computer Science, Spring 2026}}
+\title{Audio Classification via Community Detection on a kNN Graph of Audio Embeddings\footnote{CSCI 693 Research Methods in Computer Science, Spring 2026}}
 
 \author{
   Student Name\affmark[1], Hannah Tiffany\affmark[2]\\
@@ -39,26 +39,28 @@ Please check out the source code of this document for details.
 Write clearly and simply in the third person for an audience that is well-grounded in computing, but who may have limited exposure or knowledge about the specific topic of your paper. Define any technical terms deemed to require clarification when they are introduced.
 
 \section{Introduction}
-Classifying audio signals is a complex problem which continues to be the subject of research. Most recently, audio classification has been performed with the help of neural networks. This research project aims to use audio graphs to improve sound classification by encoding relationships which might otherwise not be obvious. Graph encoding based on the principles of graph2vec is used to compare the audio graphs to quantify how similar two audio signals sound to each other.
+Classifying audio signals is a complex problem which continues to be the subject of research. Most recently, audio classification has been performed with the help of neural networks. This research project aims to use kNN graphs of embedded audio to improve sound classification by encoding similarities between sounds. 
 
 \subsection{Context and Background}
-Digital signal processing (DSP) is an important aspect of audio and video engineering. DSP techniques are used to convert analog signals into digital signals. Graph signal processing (GSP) is a type of DSP that uses graphs to encode and transform the signal. GSP has important applications in fields such as biology, networks, and neuroscience. In this research paper GSP is combined with embeddeding techniques for audio classification.
-Graph embedding has been an important aspect of graph theory for many years. Built off techniques such as word2vec, graph embeddings use machine learning models to convert graphs into vector space. Relationships between these vector, such as similar magnitude or diretion, or lying close to each other in the coordinate plane, represent similarities between the graphs they embed. These can be quantified with cosine similarity.
-
+Audio classification and genre detection are an ongoing area of reserach. Machine learning has shown great benefits to improve audio classification. One method is through embeddings. Built off of the principles in word2vec\cite{mikolov}, audio embedding transforms audio into vectors. The angle between audio signals represents their similartiy.
+This similarity can be quantified with the cosine of the angle between the vectors. A graph can be constructed from these embeddings, where each node represents an audio sample, and edges encode the cosine similarities between them. To perform classification, groups of similar audio signals must be determined. This is achieved with
+Leiden clustering\cite{traag}. Communities are a group of nodes which are more densely connected to each other than nodes outside. Leiden clustering aims to create well-defined and meaningful communities by maximizing modularity. The algorithm is composed of three main phases:
+1. Local Moving of Nodes: Nodes are intially assigned to individual clusters, then moved between clusters to maximize modularity.
+2. Refinement of Partitions: The internal structure of each community is refined to ensure no disconnected nodes.
+3. Aggregation into Super-nodes: The network's strucutre is simplfied by aggregating the nodes in each community into one super-node.
+For this paper, the third step is ignored. Analyzing the quality of the communities is an important piece of this research, which is not easily accomplished through a super-node.
 
 \subsection{Problem Statement and Research Question}
-This paper aims to improve audio classification by using the properities of graphs to encode audio structure. This research will answer the question: "Can audio graphs improve classification by encoding signal struture?"
-
+This paper aims to improve audio classification by using the properities of graphs to encode audio structure. This research will answer the question: "Can audio embedding graphs improve sound classification?"
 
 \subsection{Significance of the Study}
-This paper is impactful in that it uses graph signal processing and graph embedding for audio classification. This work could have future applications in genre detection, identifying similar songs, or identifying audio as speech, music, or environmental sound.
+This paper is impactful in that it uses graphs and audio embedding for audio classification. This work could have future applications in genre detection, identifying similar songs, or identifying audio as speech, music, or environmental sound.
 
 \subsection{Scope and Organization}
 The next section of this paper will summarize the current literature avaliable in this field. Next, the methodology and of this study will be explained, including the research design and data collection methods. Finally, the results and implications of the study will be summarized. 
 
 \section{Literature Review}
-Much research has been done into graph signal processing, dynamic graphs, and audio classification. However, no significant research has combined all three. The sources used in this project will explore these fields separately to provide the background information necessary to understand the
-project. The sources also provide a motivation for the project, as many reference audio as an important
+Significant research has been done in the field of embeddings, graph signal processing and audio classification. However, little work exists which combines all three. The sources also provide a motivation for the project, as many reference audio as an important
 application of GSP. Audio classification is a well-established field that has been researched for years. The works most relevant to this project are covered here.
 
 \begin{itemize}[noitemsep]
@@ -161,9 +163,10 @@ application of GSP. Audio classification is a well-established field that has be
 \section{Methodology (or Materials and Methods)}
 
 \subsection{Research Design}
-This research is an experimental study to classify sound through graph community detection. The nodes of the graph will be composed of i audio samples, ai. Audio samples are sourced from FreeSound, a website of open-source audio samples available for download. For this research, audio, speech, and environmental sounds were used. Each audio sample is represented by a feature vector zi, which comprises the node features. Feature vectors are learned through audio embedding via Contrasive Language-Audio Pretraining (CLAP), a pre-trained neural network for audio to vector embedding. Using a pretrained neural network was determined to be the best choice for this project, because building and developing a new neural network is not the focus of the research and is outside the scope of the project. Simpler methods which do not require a neural network were considered, such as the log-mel spectogram averaged over time, but this would not be nearly as robust. An audio embedding from a neural network gives the best representation of the audio sample by capture timbre, texture, semantic similarity, and some temporal structure. It is also less sensitive to noise, time shifts, and small spectral variations. CLAP was chosen over other models because it was trained on large audio datasets containing multiple different kinds of audio, including the three used in this project (speech, environmental sounds, and music). It is a good choice for similarity detection because it also learns and embeds semantic similartiy.
-A kNN graph is built by connecting each audio sample to it’s top k nearest neighbors, evaluated on cosine similarity. Cosine similarity measures the angle between vectors, which represents similarity between audio embeddings. Magnitude is often arbitrary and noisy, thus is not a necessary measurement. For this project, values of k will be 5, 10, and 20. Edges will only be added if they have a similarity score above 0.6. This limits the edges of audio embeddings that are dissimilar from the rest of the dataset. 0.6 was chosen as the threshold because it encodes moderate similarity.
-After the graph is built, community detection is used to determine how the graph groups audio signals from the embedding.
+This research is an experimental study to classify sound through graph community detection. The nodes of the graph will be composed of i audio samples, ai. Audio samples are sourced from FreeSound and Free Music Archieve, which house open-source audio samples available for download. For this research, audio, speech, and environmental sounds were used. Each audio sample is represented by a feature vector zi, which comprises the node features. Feature vectors are learned through audio embedding via Contrasive Language-Audio Pretraining (CLAP), a pre-trained neural network for audio to vector embedding. Using a pretrained neural network was determined to be the best choice for this project, because building and developing a new neural network is not the focus of the research and is outside the scope of the project. Simpler methods, which do not require a neural network, were considered, such as the log-mel spectrogram averaged over time, but this would not be nearly as robust. An audio embedding from a neural network gives the best representation of the audio sample by capturing timbre, texture, semantic similarity, and some temporal structure. It is also less sensitive to noise, time shifts, and small spectral variations. CLAP was chosen over other models because it was trained on large audio datasets containing multiple different kinds of audio, including the three used in this project (speech, environmental sounds, and music). It is a good choice for similarity detection because it also learns and embeds semantic similarity.
+A kNN graph is built by connecting each audio sample to its top k nearest neighbors, evaluated on cosine similarity. Cosine similarity measures the angle between vectors, which represents similarity between audio embeddings. Magnitude is often arbitrary and noisy; thus is not a necessary measurement. For this project, which focuses on small graphs, the values of k will be 5 and 10. Edges will only be added if they have a similarity score in the top 70% of calculated scores. This limits the edges of audio embeddings that are dissimilar from the rest of the dataset. 
+After the graph is built, the Leiden Algorithm is used for community detection to determine audio clusters from the graph. Each audio signal is labeled prior to the embedding with the correct classification. After the graph is built and communities are detected, the silhouette coefficient and adjusted random index are calculated as measures of the strength of the clusterings.
+
 
 \subsection{Code Listings}
 Short, relevant code snippets or pseudocode can be included inline if they are important for enhancing understanding, provided they are well-formatted and clearly labeled. Commands from \texttt{listings} package allow you to display code easily with customizable coloring and styling rules. Here is an example.
