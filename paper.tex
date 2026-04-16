@@ -27,16 +27,6 @@
 The Abstract should offer a succinct summary of the entire paper, usually 150–300 words. Key contents: Research problem, methods, main findings, and major conclusions.
 \end{abstract}
 
-\section{Citation}
-Appropriately cite all references to other published works included in the paper.
-\texttt{biblatex} is used to create a list of references or bibliography as the
-last section in the paper. Here are citation examples for a
-book\cite{latexcompanion}, a journal paper\cite{einstein}, a
-website\cite{knuthwebsite}, and a conference proceeding paper\cite{maurer}.
-Please check out the source code of this document for details.
-
-\section{Style}
-Write clearly and simply in the third person for an audience that is well-grounded in computing, but who may have limited exposure or knowledge about the specific topic of your paper. Define any technical terms deemed to require clarification when they are introduced.
 
 \section{Introduction}
 Classifying audio signals is a complex problem which continues to be the subject of research. Most recently, audio classification has been performed with the help of neural networks. This research project aims to use kNN graphs of embedded audio to improve sound classification by encoding similarities between sounds. 
@@ -45,9 +35,11 @@ Classifying audio signals is a complex problem which continues to be the subject
 Audio classification and genre detection are an ongoing area of reserach. Machine learning has shown great benefits to improve audio classification. One method is through embeddings. Built off of the principles in word2vec\cite{mikolov}, audio embedding transforms audio into vectors. The angle between audio signals represents their similartiy.
 This similarity can be quantified with the cosine of the angle between the vectors. A graph can be constructed from these embeddings, where each node represents an audio sample, and edges encode the cosine similarities between them. To perform classification, groups of similar audio signals must be determined. This is achieved with
 Leiden clustering\cite{traag}. Communities are a group of nodes which are more densely connected to each other than nodes outside. Leiden clustering aims to create well-defined and meaningful communities by maximizing modularity. The algorithm is composed of three main phases:
-1. Local Moving of Nodes: Nodes are intially assigned to individual clusters, then moved between clusters to maximize modularity.
-2. Refinement of Partitions: The internal structure of each community is refined to ensure no disconnected nodes.
-3. Aggregation into Super-nodes: The network's strucutre is simplfied by aggregating the nodes in each community into one super-node.
+\begin{enumerate}[noitemsep]
+  \item Local Moving of Nodes: Nodes are intially assigned to individual clusters, then moved between clusters to maximize modularity.
+  \item Refinement of Partitions: The internal structure of each community is refined to ensure no disconnected nodes.
+  \item Aggregation into Super-nodes: The network's strucutre is simplfied by aggregating the nodes in each community into one super-node.
+\end{enumerate}
 For this paper, the third step is ignored. Analyzing the quality of the communities is an important piece of this research, which is not easily accomplished through a super-node.
 
 \subsection{Problem Statement and Research Question}
@@ -63,109 +55,84 @@ The next section of this paper will summarize the current literature avaliable i
 Significant research has been done in the field of embeddings, graph signal processing and audio classification. However, little work exists which combines all three. The sources also provide a motivation for the project, as many reference audio as an important
 application of GSP. Audio classification is a well-established field that has been researched for years. The works most relevant to this project are covered here.
 
-\begin{itemize}[noitemsep]
-  \item The article "Graph Signal Processing: History, development, impact, and outlook" was written by
-        professors G. Leus, A. G. Marques, J. M. F. Moura, A. Ortega, and D. I. Shuman. It was published in the
-        Signal Processing Magazine in 2023. This paper is an introduction to the field of graph signal
-        It presents multiple approaches to GSP, with references and theoretical background. It ends
-        with a description of the value and impact of GSP in multiple fields. This paper argues that GSP is an
-        important and relevant field with multiple use cases and applications. It supports the argument with a
-        thorough introduction and overview of the field, supported by multiple credible references. Although it
-        does not directly address audio signal processing with graphs, many of the key ideas are still relevant and
-        applicable. This text acts as a motivator for the project and provides the necessary background
-        information to understand GSP.
-\end{itemize}
+  The article "Graph Signal Processing: History, development, impact, and outlook" was written by
+professors G. Leus, A. G. Marques, J. M. F. Moura, A. Ortega, and D. I. Shuman. It was published in the
+Signal Processing Magazine in 2023. This paper is an introduction to the field of graph signal
+It presents multiple approaches to GSP, with references and theoretical background. It ends
+with a description of the value and impact of GSP in multiple fields. This paper argues that GSP is an
+important and relevant field with multiple use cases and applications. It supports the argument with a
+thorough introduction and overview of the field, supported by multiple credible references. Although it
+does not directly address audio signal processing with graphs, many of the key ideas are still relevant and
+applicable. This text acts as a motivator for the project and provides the necessary background
+information to understand GSP.
 
-\begin{enumerate}[noitemsep]
-  \item A second paper exploring graph signal processing is "The emerging field of signal processing on
-        graphs: Extending high-dimensional data analysis to networks and other irregular domains," published by
-        D. I. Shuman, S. K. Narang, P. Frossard, A. Ortega and P. Vandergheynst in IEEE Signal Processing
-        Magazine in 2013. Although this source is outdated, many of the concepts and applications are still
-        beneficial for the sake of this research project. It is a credible source with reliable information, and
-        continues to be a valuable resource. The main section of this paper covers principles in the field, including 
-        Fourier transforms, Laplacian and matrix representation, filtering, convolution, translation, modulation and 
-        dilation, graph transforms, and challenges. It ends with an overview of open questions.
-\end{enumerate}
+  A second paper exploring graph signal processing is "The emerging field of signal processing on
+graphs: Extending high-dimensional data analysis to networks and other irregular domains," published by
+D. I. Shuman, S. K. Narang, P. Frossard, A. Ortega and P. Vandergheynst in IEEE Signal Processing
+Magazine in 2013. Although this source is outdated, many of the concepts and applications are still
+beneficial for the sake of this research project. It is a credible source with reliable information, and
+continues to be a valuable resource. The main section of this paper covers principles in the field, including 
+Fourier transforms, Laplacian and matrix representation, filtering, convolution, translation, modulation and 
+dilation, graph transforms, and challenges. It ends with an overview of open questions.
 
-\begin{enumerate}[noitemsep]
-  \item The field of audio classification has been researched for years, mainly with machine learning 
-        techniques. The paper “Content Analysis for Audio Classification and Segmentation” by Lie Lu, 
-        Hong-Jiang Zhang and Hao Jiang in 2002 presents a method for audio classification as speech, 
-        music, environmental sound, or silence. It was published by the peer-reviewed magazine IEEE 
-        Transactions on Speech and Audio Processing. This paper aims to classify the type of audio 
-        and segment speech audio based on the speaker. The paper uses the K-Nearest Neighbors (KNN) 
-        algorithm applied to the zero-crossing rate of a frame to differentiate between different 
-        types of signals. Speech signals often display a pattern of alternating voiced and unvoiced 
-        sounds that music signals do not, which can be identified by the KNN. Silence can be determined 
-        by an average short-time energy and a zero-crossing rate lower than a given threshold. 
-        Discriminating music and environmental sounds can be achieved with band periodicity, spectrum 
-        flux, and noise frame ratio. Segmentation is achieved using Linear Spectral Pairs to 
-        discriminate between two speakers. The final results found that this method worked well for 
-        discriminating between music, speech, and environmental noises. Speaker discrimination worked 
-        fairly well, but struggled to detect the same speaker in different environments. 
-\end{enumerate}
+  The field of audio classification has been researched for years, mainly with machine learning 
+techniques. The paper “Content Analysis for Audio Classification and Segmentation” by Lie Lu, 
+Hong-Jiang Zhang and Hao Jiang in 2002 presents a method for audio classification as speech, 
+music, environmental sound, or silence. It was published by the peer-reviewed magazine IEEE 
+Transactions on Speech and Audio Processing. This paper aims to classify the type of audio 
+and segment speech audio based on the speaker. The paper uses the K-Nearest Neighbors (KNN) 
+algorithm applied to the zero-crossing rate of a frame to differentiate between different 
+types of signals. Speech signals often display a pattern of alternating voiced and unvoiced 
+sounds that music signals do not, which can be identified by the KNN. Silence can be determined 
+by an average short-time energy and a zero-crossing rate lower than a given threshold. 
+Discriminating music and environmental sounds can be achieved with band periodicity, spectrum 
+flux, and noise frame ratio. Segmentation is achieved using Linear Spectral Pairs to 
+discriminate between two speakers. The final results found that this method worked well for 
+discriminating between music, speech, and environmental noises. Speaker discrimination worked 
+fairly well, but struggled to detect the same speaker in different environments. 
 
-\begin{enumerate}[noitemsep]
-  \item Genre classification has also been improved with machine learning methods. The paper “Genre 
-        Classification Empowered by Knowledge-Embedded Music Representation” by H. Ding, L. Zhai, C. 
-        Zhao, F. Wang, G. Wang, and W. Xi published by IEEE in 2024, uses a knowledge graph for 
-        genre classification. The knowledge graph is propagated by machine learning models to build 
-        a relationship-aware audio framework to classify music genres. Multiple partition strategies 
-        are used to divide the graph into its different genres. The results showed superiority over 
-        many existing frameworks.
-\end{enumerate}
+  Genre classification has also been improved with machine learning methods. The paper “Genre 
+Classification Empowered by Knowledge-Embedded Music Representation” by H. Ding, L. Zhai, C. 
+Zhao, F. Wang, G. Wang, and W. Xi published by IEEE in 2024, uses a knowledge graph for 
+genre classification. The knowledge graph is propagated by machine learning models to build 
+a relationship-aware audio framework to classify music genres. Multiple partition strategies 
+are used to divide the graph into its different genres. The results showed superiority over 
+many existing frameworks.
 
-\begin{enumerate}[noitemsep]
-  \item Recently, audio classification and recognition has found much improvement from leveraging
-        machine learning and neural networks. The paper "Graph-Based Audio Classification Using
-        Pre-Trained Models and Graph Neural Networks" by A. E. Castro-Ospina, M. A. Solarte-Sanchez,
-        L. S. Vega-Escobar, C. Isaza, and J. D. Martinez-Vargas explores how graph neural nets can
-        improve audio classification. The proposed methodology uses pre-trained models
-        designed to extract deep features from audio files, which are used as nodes to build a grpah.
-        These are then used to train graph neural networks. The paper tests mutliple diferent kinds of
-        GNNs. The end results found that the models performed with between  
-\end{enumerate}
+  Recently, audio classification and recognition has found much improvement from leveraging
+machine learning and neural networks. The paper "Graph-Based Audio Classification Using
+Pre-Trained Models and Graph Neural Networks" by A. E. Castro-Ospina, M. A. Solarte-Sanchez,
+L. S. Vega-Escobar, C. Isaza, and J. D. Martinez-Vargas explores how graph neural nets can
+improve audio classification. The proposed methodology uses pre-trained models
+designed to extract deep features from audio files, which are used as nodes to build a grpah.
+These are then used to train graph neural networks. The paper tests mutliple diferent kinds of
+GNNs. The end results found that the models performed with between  
 
-\begin{enumerate}[noitemsep]
-  \item 	Comparing the similarity between graphs with different numbers of nodes is most easily 
-  achieved with Graph2Vec embeddings, first presented in the paper “graph2vec: Learning Distributed
-   Representations of Graphs” by A. Narayanan, M. Chandramohan, R. Venkatsean, L. Chen, Y. Liu and 
-   S. Jaiswal. The paper presents a machine learning model that can transform a graph into a vector 
-   of fixed size. The paper introduces the need for graph2vec as a method to compress graphs to a 
-   fixed size to be used with kernels for graph comparisons. It builds upon other similar embedding 
-   frameworks, such as word2vec, by viewing a graph as an entire document, and the nodes as words. 
-   The paper concludes that graph2vec is an effective method to embed graphs to reveal the 
-   substructure and important characteristics of the graph. 
-\end{enumerate}
+  Comparing the similarity between graphs with different numbers of nodes is most easily 
+achieved with Graph2Vec embeddings, first presented in the paper “graph2vec: Learning Distributed
+Representations of Graphs” by A. Narayanan, M. Chandramohan, R. Venkatsean, L. Chen, Y. Liu and 
+S. Jaiswal. The paper presents a machine learning model that can transform a graph into a vector 
+of fixed size. The paper introduces the need for graph2vec as a method to compress graphs to a 
+fixed size to be used with kernels for graph comparisons. It builds upon other similar embedding 
+frameworks, such as word2vec, by viewing a graph as an entire document, and the nodes as words. 
+The paper concludes that graph2vec is an effective method to embed graphs to reveal the 
+substructure and important characteristics of the graph. 
 
-\begin{enumerate}[noitemsep]
-   \item Overview of Existing Research
-   \begin{itemize}[noitemsep]
-     \item Summarize and synthesize relevant scholarly work.
-     \item Identify trends, debates, and major theories.
-   \end{itemize}
-   \item Critical Evaluation
-   \begin{itemize}[noitemsep]
-     \item Critically analyze strengths and weaknesses in the current body of literature.
-     \item Highlight methodological gaps or inconsistencies.
-   \end{itemize}
-   \item Theoretical Framework (If Applicable)
-   \begin{itemize}[noitemsep]
-     \item Present the theories or conceptual models guiding your research.
-     \item Show how your study aligns with or challenges existing theories.
-   \end{itemize}
-   \item Research Gap Rationale
-   \begin{itemize}[noitemsep]
-     \item Pinpoint the specific knowledge gap your research aims to fill.
-   \end{itemize}
-\end{enumerate}
-
-\section{Methodology (or Materials and Methods)}
+\section{Methodology}
 
 \subsection{Research Design}
 This research is an experimental study to classify sound through graph community detection. The nodes of the graph will be composed of i audio samples, ai. Audio samples are sourced from FreeSound and Free Music Archieve, which house open-source audio samples available for download. For this research, audio, speech, and environmental sounds were used. Each audio sample is represented by a feature vector zi, which comprises the node features. Feature vectors are learned through audio embedding via Contrasive Language-Audio Pretraining (CLAP), a pre-trained neural network for audio to vector embedding. Using a pretrained neural network was determined to be the best choice for this project, because building and developing a new neural network is not the focus of the research and is outside the scope of the project. Simpler methods, which do not require a neural network, were considered, such as the log-mel spectrogram averaged over time, but this would not be nearly as robust. An audio embedding from a neural network gives the best representation of the audio sample by capturing timbre, texture, semantic similarity, and some temporal structure. It is also less sensitive to noise, time shifts, and small spectral variations. CLAP was chosen over other models because it was trained on large audio datasets containing multiple different kinds of audio, including the three used in this project (speech, environmental sounds, and music). It is a good choice for similarity detection because it also learns and embeds semantic similarity.
-A kNN graph is built by connecting each audio sample to its top k nearest neighbors, evaluated on cosine similarity. Cosine similarity measures the angle between vectors, which represents similarity between audio embeddings. Magnitude is often arbitrary and noisy; thus is not a necessary measurement. For this project, which focuses on small graphs, the values of k will be 5 and 10. Edges will only be added if they have a similarity score in the top 70% of calculated scores. This limits the edges of audio embeddings that are dissimilar from the rest of the dataset. 
-After the graph is built, the Leiden Algorithm is used for community detection to determine audio clusters from the graph. Each audio signal is labeled prior to the embedding with the correct classification. After the graph is built and communities are detected, the silhouette coefficient and adjusted random index are calculated as measures of the strength of the clusterings.
+  A kNN graph is built by connecting each audio sample to its top k nearest neighbors, evaluated on cosine similarity. Cosine similarity measures the angle between vectors, which represents similarity between audio embeddings. Magnitude is often arbitrary and noisy; thus is not a necessary measurement. For this project, which focuses on small graphs, the values of k will be 5 and 10. Edges will only be added if they have a similarity score in the top 70\% of calculated scores. This limits the edges of audio embeddings that are dissimilar from the rest of the dataset. 
+
+  After the graph is built, the Leiden Algorithm is used for community detection to determine audio clusters from the graph. Each audio signal is labeled prior to the embedding with the correct classification. After the graph is built and communities are detected, the silhouette coefficient and adjusted random index are calculated as measures of the strength of the clusterings.
+
+  Two datasets are used in this research. The first contains a mix of 29 audio signals, broken down as follows: 10 speech, 7 singing (without music), 11 instrumental music and a 1 constant tone. The second set contains music of five different genres: pop, country, rock, hip-hop, and RnB. Five songs for each genre are sampled. Community detection with a k value of 5 and 10 was performed for each dataset. For this research, labels are not assgined to the clusters, as this would require further processing by a neural network. The goal of this project is to group together similar sounds. For this reason, intrinsic metrics are used to evaluate the quality of the clusters, which do not require a ground truth. Three metrics are evaulated in this paper:
+
+\begin{enumerate}[noitemsep]
+  \item Modularity: Measures the strength of division of the network by measuring the weight of edges within the cluster verse out of the cluster. The Leiden algorithm clusters nodes by maximizing modularity.
+  \item Silhouette Coefficient\cite{rousseeuw}: Measures how well a point fits in it's cluster when compared to other clusters. It is calculated with the mean intra-cluster distance and the mean nearest-cluster distance for each sample.
+  \item Daives-Bouldin Score\cite{davies}: Measures the average similarity of each cluster with it's most similar cluster, where similarity is measured as the ratio of within-cluster distances to between-cluster distances. The DB score gives insight into the between cluster seperation.
+\end{enumerate}
 
 
 \subsection{Code Listings}
@@ -192,37 +159,127 @@ print("The number of guesses is " + str(num_guesses))
 \section{Results (or Findings)}
 
 \subsection{Presentation of Data}
-Organize findings logically (chronologically, thematically, or by research questions). Use tables, figures, charts, or direct quotes (for qualitative research) as needed. Table \ref{table:nonlin} is an example of a simple table.
+Table \ref{table:nonlin} compares the effectiveness of the clusterings from each graph.
 
 \begin{table}[ht]
-\caption{Nonlinear Model Results} % title of Table
+\caption{Clustering Effectiveness per Graph} % title of Table
 \label{table:nonlin} % is used to refer this table in the text
 \centering % used for centering table
-\begin{tabular}{c c c c} % centered columns (4 columns)
+\begin{tabular}{c c c c c c} % centered columns (4 columns)
 \hline\hline %inserts double horizontal lines
-Case & Method\#1 & Method\#2 & Method\#3 \\ [0.5ex] % inserts table
+Graph & \# Audio Types & \# Detected Communities & Modularity & Silhouette Coefficient & DB Score & Modularity \\ [0.5ex] % inserts table
 %heading
 \hline % inserts single horizontal line
-1 & 50 & 837 & 970 \\ % inserting body of the table
-2 & 47 & 877 & 230 \\
-3 & 31 & 25 & 415 \\
-4 & 35 & 144 & 2356 \\
-5 & 45 & 300 & 556 \\ [1ex] % [1ex] adds vertical space
+Mixed, k=5 & 4 & 3 &  & 1 & 1  \\ % inserting body of the table
+Mixed, k=10 & 4 & 2 & 230 & 1 & 1 \\
+Music, k=5 & 5 & 25 & 415  & 1 & 1\\
+Music, k=10 & 5 & 144 & 2356 & 1 & 1\\ [1ex]
 \hline %inserts single line
 \end{tabular}
 \end{table}
 
-\subsection{Figures}
+\subsection{Mixed at k=5}
 
-The ``\verb|figure|'' environment should be used for figures. One or
-more images can be placed within a figure. If your figure contains
-third-party material, you must clearly identify it as such, as shown
-in the example Figure \ref{fig:theRR} below.
+Figure \ref{fig:mixed5Heatmap} shows the heatmap of cosine similarties between audio embeddings.
 \begin{figure}[h]
   \centering
-  \includegraphics[width=\linewidth]{theRRimage}
-  \caption{A screenshot of the music video for "Never gonna give you up", performed by Rick Astley. Screenshot via Wikipedia. (\protect\url{https://en.wikipedia.org/wiki/Rickrolling}).}
-  \label{fig:theRR}
+  \includegraphics[width=\linewidth]{mixed5Heatmap}
+  \caption{Heatmap of cosine similarities between audio embeddings on the mixed dataset, where k=5}
+  \label{fig:mixed5Heatmap}
+\end{figure}
+
+Figure \ref{fig:mixed5} below shows the graph created from the mixed signals dataset at k=5.
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{mixed5}
+  \caption{Graph of mixed audio signals dataset, k=5}
+  \label{fig:mixed5}
+\end{figure}
+
+Figures \ref{fig:minxed5communities1} below shows the best cluster seperation from the graph. 
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{mixed5communities1}
+  \caption{Detected communities from the mixed audio dataset, k=5}
+  \label{fig:mixed5communities1}
+\end{figure}
+
+\subsection{Mixed at k=10}
+
+Figure \ref{fig:mixed10Heatmap} shows the heatmap of cosine similarties between audio embeddings.
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{mixed10Heatmap}
+  \caption{Heatmap of the cosine similarities of the audio from the mixed audio dataset when k=10}
+  \label{fig:mixed10Heatmap}
+\end{figure}
+
+Figure \ref{fig:mixed10} below shows the graph created from the mixed audio dataset at k=10.
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{mixed10}
+  \caption{Graph of mixed audio signals dataset, k=5}
+  \label{fig:mixed10}
+\end{figure}
+
+Figure \ref{fig:mixed10communities1} below shows the clustering on the mixed audio dataset with k=10.
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{mixed10communities1}
+  \caption{Detected communities from the mixed audio dataset when k=10}
+  \label{fig:graph1communities1}
+\end{figure}
+
+\subsection{Music at k=5}
+
+Figure \ref{fig:music5Heatmap} shows the heatmap of cosine similarties between audio embeddings.
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{music5Heatmap}
+  \caption{Heatmap of the cosine similarity of the music dataset, k=5}
+  \label{fig:music5Heatmap}
+\end{figure}
+
+Figure \ref{fig:music5} below shows the graph created from the mixed signals dataset at k=5.
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{music5}
+  \caption{Graph of music audio signals dataset, k=5}
+  \label{fig:music5}
+\end{figure}
+
+Figures \ref{fig:music5communities2} shows the best detected clustering of music genres when k=5.
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{music5communities2}
+  \caption{Communities detected from the music genre dataset when k=5.}
+  \label{fig:music5communities2}
+\end{figure}
+
+\subsection{Music at k=10}
+
+Figure \ref{fig:music10Heatmap} shows the heatmap of cosine similarties between audio embeddings of the audio genres dataset at k=10.
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{music10Heatmap}
+  \caption{Heatmap of the cosine similarities of the audio embeddings from the music genres dataset when k=10}
+  \label{fig:music10Heatmap}
+\end{figure}
+
+Figure \ref{fig:music10} below shows the graph created from the music genres dataset at k=10.
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{music10}
+  \caption{Graph of music genres dataset, k=10}
+  \label{fig:music10}
+\end{figure}
+
+Figures \ref{fig:music10communities1} below shows the detected communities from the graph. 
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{music10communities1}
+  \caption{Communities detected from the music genres dataset at k=10}
+  \label{fig:music10communities1}
 \end{figure}
 
 Your figures should contain a caption which describes the figure to
