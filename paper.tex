@@ -12,9 +12,8 @@
 \title{Audio Classification via Community Detection on a kNN Graph of Audio Embeddings\footnote{CSCI 693 Research Methods in Computer Science, Spring 2026}}
 
 \author{
-  Student Name\affmark[1], Hannah Tiffany\affmark[2]\\
+  Hannah Tiffany\affmark[1]\\
   \affmark[1]Computer Science\\
-  \affmark[2]Computer Science Department\\
   California State University, Chico\\
   Chico, CA 95929\\
   \email{\{student,hltiffany\}@csuchico.edu}
@@ -24,7 +23,12 @@
 \maketitle
 
 \begin{abstract}
-The Abstract should offer a succinct summary of the entire paper, usually 150–300 words. Key contents: Research problem, methods, main findings, and major conclusions.
+  This reserach aims to use the structural properties of graphs for classifications of embedded audio signals. Audio signals are embedded using a neural network
+and mapped to vector space. The cosine similarity between audio samples can be used to determine how similar the samples are in harmonics, frequency, strucutre, etc.
+A kNN graph is constructed, with edges connecting the k most similar audio samples, and community detection finds patterns of similar groupings. By using a grpah, a
+more nuanced view of audio classification is revealed by showing how audio does not often belong to just one category, but has similarties to many differnt types of audio.
+The results of this paper show that community detection can be and effective way to determine classification groups and create the basis of a GNN, where a lower k-value will
+create more discerning clusters, and a higher k-value will show more general clustering.
 \end{abstract}
 
 
@@ -129,58 +133,41 @@ This research is an experimental study to classify sound through graph community
   Two datasets are used in this research. The first contains a mix of 29 audio signals, broken down as follows: 10 speech, 7 singing (without music), 11 instrumental music and a 1 constant tone. The second set contains music of five different genres: pop, country, rock, hip-hop, and RnB. Five songs for each genre are sampled. Community detection with a k value of 5 and 10 was performed for each dataset. For this research, labels are not assgined to the clusters, as this would require further processing by a neural network. The goal of this project is to group together similar sounds. For this reason, intrinsic metrics are used to evaluate the quality of the clusters, which do not require a ground truth. Three metrics are evaulated in this paper:
 
 \begin{enumerate}[noitemsep]
-  \item Modularity: Measures the strength of division of the network by measuring the weight of edges within the cluster verse out of the cluster. The Leiden algorithm clusters nodes by maximizing modularity.
-  \item Silhouette Coefficient\cite{rousseeuw}: Measures how well a point fits in it's cluster when compared to other clusters. It is calculated with the mean intra-cluster distance and the mean nearest-cluster distance for each sample.
-  \item Daives-Bouldin Score\cite{davies}: Measures the average similarity of each cluster with it's most similar cluster, where similarity is measured as the ratio of within-cluster distances to between-cluster distances. The DB score gives insight into the between cluster seperation.
+  \item Modularity: Measures the strength of division of the network by measuring the weight of edges within the cluster verse out of the cluster. The Leiden algorithm clusters nodes by maximizing modularity. Values above 0.3 are often indicate of more internal eges than random chance.
+  \item Silhouette Coefficient\cite{rousseeuw}: Measures how well a point fits in it's cluster when compared to other clusters. It is calculated with the mean intra-cluster distance and the mean nearest-cluster distance for each sample. Values range from -1 to 1, with higher scores indicating better clustering.
+  \item Daives-Bouldin Score\cite{davies}: Measures the average similarity of each cluster with it's most similar cluster, where similarity is measured as the ratio of within-cluster distances to between-cluster distances. The DB score gives insight into the between cluster seperation. Lower scores indicate seperation.
 \end{enumerate}
 
+\section{Results}
 
-\subsection{Code Listings}
-Short, relevant code snippets or pseudocode can be included inline if they are important for enhancing understanding, provided they are well-formatted and clearly labeled. Commands from \texttt{listings} package allow you to display code easily with customizable coloring and styling rules. Here is an example.
-
-\begin{lstlisting}[language=Python,  caption=Python example]
-x = 42
-epsilon = 0.01
-step = epsilon**2
-num_guesses = 0
-ans = 0.0
-while abs(ans**2-x) > epsilon and ans < x:
-    ans = ans + step
-    num_guesses += 1
-if abs(ans**2-x) <= epsilon:
-    print(str(ans) +
-    ' is close to the square root of ' +
-    str(x))
-else:
-    print('Failed to find square root of ' + str(x))
-print("The number of guesses is " + str(num_guesses))
-\end{lstlisting}
-
-\section{Results (or Findings)}
-
-\subsection{Presentation of Data}
-Table \ref{table:nonlin} compares the effectiveness of the clusterings from each graph.
+\subsection{Summary of Findings}
+Table \ref{table:nonlin} compares the effectiveness of the clusterings from each graph. It should be noted that there is some amount of randomness involved in the Leiden community detection algorithm, because it is a heuristic algorithm. For this reason, different community splits may be found on different runs. The algorithm was run 10 times for each of the following datasets, and the highest scoring split is used for these results. The best scores were achieved by the mixed dataset with k=5. Since this dataset is composed of mixed audio samples, the different communities are easier to differentiate because their embeddings have a larger difference in cosine similarity when compared to the music sample.
+The first three tested datasets have statistcally signifcant results that imply the resulting community splits were not found due to random chance. The last dataset, music with k=10, has a modularity of 0, meaning no communities could be determined. This is due to the fact that each node has 10 edges. For this dataset, only 5 samples of each genre were used, so the remaining 5 edges were forced onto more dissimilar audio samples. This made community detection difficult, because there are not obvious groups of nodes with "in" edges and "out" edges. 
 
 \begin{table}[ht]
 \caption{Clustering Effectiveness per Graph} % title of Table
 \label{table:nonlin} % is used to refer this table in the text
 \centering % used for centering table
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{c c c c c c} % centered columns (4 columns)
 \hline\hline %inserts double horizontal lines
-Graph & \# Audio Types & \# Detected Communities & Modularity & Silhouette Coefficient & DB Score & Modularity \\ [0.5ex] % inserts table
+Graph & \# Audio Types & \# Detected Communities & Modularity & Silhouette Coefficient & DB Score \\ [0.5ex] % inserts table
 %heading
 \hline % inserts single horizontal line
-Mixed, k=5 & 4 & 3 &  & 1 & 1  \\ % inserting body of the table
-Mixed, k=10 & 4 & 2 & 230 & 1 & 1 \\
-Music, k=5 & 5 & 25 & 415  & 1 & 1\\
-Music, k=10 & 5 & 144 & 2356 & 1 & 1\\ [1ex]
+Mixed, k=5 & 4 & 3 & 0.5112 & 0.1290 & 1.532  \\ % inserting body of the table
+Mixed, k=10 & 4 & 2 & 0.3215 & 0.1261 & 1.553 \\
+Music, k=5 & 5 & 4 & 0.3711 & 0.0012 & 2.493 \\
+Music, k=10 & 5 & 1 & 0 & -0.009 & 2.576\\ [1ex]
 \hline %inserts single line
 \end{tabular}
+}
 \end{table}
 
-\subsection{Mixed at k=5}
+\subsection{Mixed Dataset}
 
-Figure \ref{fig:mixed5Heatmap} shows the heatmap of cosine similarties between audio embeddings.
+Figure \ref{fig:mixed5Heatmap} shows the heatmap of cosine similarties between audio embeddings for the dataset of mixed audio. The heatmap is groups the embeddings with the most similar cosine similarties together.
+Three clear groups can be found from this map. From the top left, first includes six of the speech samples. The second, grouped closely to speech, includes six of the singing samples. The third has the remaining speech samples.
+A final group can be seen appearing at the bottom right, composed of the music samples.
 \begin{figure}[h]
   \centering
   \includegraphics[width=\linewidth]{mixed5Heatmap}
@@ -188,7 +175,8 @@ Figure \ref{fig:mixed5Heatmap} shows the heatmap of cosine similarties between a
   \label{fig:mixed5Heatmap}
 \end{figure}
 
-Figure \ref{fig:mixed5} below shows the graph created from the mixed signals dataset at k=5.
+
+Figure \ref{fig:mixed5} below shows the graph created from the mixed signals dataset at k=5. Nodes of the same type of audio signal are colored the same.
 \begin{figure}[h]
   \centering
   \includegraphics[width=\linewidth]{mixed5}
@@ -196,7 +184,9 @@ Figure \ref{fig:mixed5} below shows the graph created from the mixed signals dat
   \label{fig:mixed5}
 \end{figure}
 
-Figures \ref{fig:minxed5communities1} below shows the best cluster seperation from the graph. 
+Figures \ref{fig:mixed5communities1} below shows the best cluster seperation achieved when k=5. From this seperation, we can see three distinct communities. The yellow community contains the six speech signals that were clustered at the top right on the heatmap.
+The blue community contains a mix of the singing and speech, which contain the second and third group on the heatmap, as well as the singular tone. We can see on the graph that even though four of speech signals are group with the singing, they also contain
+edges to the other speech signals, while the singing samples have edges which connect to music samples. The single tone sample sits in the middle, with edges to each group. The purple group contains all ten music samples, with one singing sample.
 \begin{figure}[h]
   \centering
   \includegraphics[width=\linewidth]{mixed5communities1}
@@ -204,35 +194,28 @@ Figures \ref{fig:minxed5communities1} below shows the best cluster seperation fr
   \label{fig:mixed5communities1}
 \end{figure}
 
-\subsection{Mixed at k=10}
 
-Figure \ref{fig:mixed10Heatmap} shows the heatmap of cosine similarties between audio embeddings.
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=\linewidth]{mixed10Heatmap}
-  \caption{Heatmap of the cosine similarities of the audio from the mixed audio dataset when k=10}
-  \label{fig:mixed10Heatmap}
-\end{figure}
-
-Figure \ref{fig:mixed10} below shows the graph created from the mixed audio dataset at k=10.
+Figure \ref{fig:mixed10} below shows the graph created from the mixed signals dataset at k=10. Nodes of the same type of audio signal are colored the same.
 \begin{figure}[h]
   \centering
   \includegraphics[width=\linewidth]{mixed10}
-  \caption{Graph of mixed audio signals dataset, k=5}
+  \caption{Graph of mixed audio signals dataset, k=10}
   \label{fig:mixed10}
 \end{figure}
 
-Figure \ref{fig:mixed10communities1} below shows the clustering on the mixed audio dataset with k=10.
+Figure \ref{fig:mixed10communities1} below shows the best clustering achieved when k=10. This clustering makes a clear distinction between music samples and vocal samples. The purple cluster contains the music
+samples, and the yellow cluster contains the singing and speech samples.
 \begin{figure}[h]
   \centering
   \includegraphics[width=\linewidth]{mixed10communities1}
   \caption{Detected communities from the mixed audio dataset when k=10}
-  \label{fig:graph1communities1}
+  \label{fig:mixed10communities1}
 \end{figure}
 
-\subsection{Music at k=5}
+\subsection{Music}
 
-Figure \ref{fig:music5Heatmap} shows the heatmap of cosine similarties between audio embeddings.
+Figure \ref{fig:musicHeatmap} shows the heatmap of cosine similarties between audio embeddings. The heatmap is sorted by grouping together the most similar audio embeddings based on cosine similarity.
+This heatmap shows less clear groupings than the mixed audio dataset. Two clear groupings appear in the bottom right and towards the middle left of the image, but there is no clear pattern or genre similarity from the audio in these groupings.
 \begin{figure}[h]
   \centering
   \includegraphics[width=\linewidth]{music5Heatmap}
@@ -240,7 +223,7 @@ Figure \ref{fig:music5Heatmap} shows the heatmap of cosine similarties between a
   \label{fig:music5Heatmap}
 \end{figure}
 
-Figure \ref{fig:music5} below shows the graph created from the mixed signals dataset at k=5.
+Figure \ref{fig:music5} below shows the graph created from the music samples dataset when k=5. Nodes are colored by genre.
 \begin{figure}[h]
   \centering
   \includegraphics[width=\linewidth]{music5}
@@ -248,7 +231,9 @@ Figure \ref{fig:music5} below shows the graph created from the mixed signals dat
   \label{fig:music5}
 \end{figure}
 
-Figures \ref{fig:music5communities2} shows the best detected clustering of music genres when k=5.
+Figures \ref{fig:music5communities2} shows the best detected clustering of music genres when k=5. Some patterns from the heatmap persist in this graph, but genre groupings do become slighly more apparent.
+Hip-hop and R&B are grouped together in the blue community. Country and rock are sorted together in the green community. The yellow community makes up a collection of pop, rock, and country. Finally, the
+purple community is composed of two pop songs which were sorted as the most dissimilar from other audio by the heatmap.
 \begin{figure}[h]
   \centering
   \includegraphics[width=\linewidth]{music5communities2}
@@ -256,17 +241,7 @@ Figures \ref{fig:music5communities2} shows the best detected clustering of music
   \label{fig:music5communities2}
 \end{figure}
 
-\subsection{Music at k=10}
-
-Figure \ref{fig:music10Heatmap} shows the heatmap of cosine similarties between audio embeddings of the audio genres dataset at k=10.
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=\linewidth]{music10Heatmap}
-  \caption{Heatmap of the cosine similarities of the audio embeddings from the music genres dataset when k=10}
-  \label{fig:music10Heatmap}
-\end{figure}
-
-Figure \ref{fig:music10} below shows the graph created from the music genres dataset at k=10.
+Figure \ref{fig:music10} below shows the graph created from the music genres dataset at k=10. Nodes are colored by genre.
 \begin{figure}[h]
   \centering
   \includegraphics[width=\linewidth]{music10}
@@ -274,7 +249,7 @@ Figure \ref{fig:music10} below shows the graph created from the music genres dat
   \label{fig:music10}
 \end{figure}
 
-Figures \ref{fig:music10communities1} below shows the detected communities from the graph. 
+Figures \ref{fig:music10communities1} below shows the best detected clusters from the graph when k=10. This graph was too dense to split into communities, therefore only one community is detected.
 \begin{figure}[h]
   \centering
   \includegraphics[width=\linewidth]{music10communities1}
@@ -282,63 +257,57 @@ Figures \ref{fig:music10communities1} below shows the detected communities from 
   \label{fig:music10communities1}
 \end{figure}
 
-Your figures should contain a caption which describes the figure to
-the reader. Figure captions are placed {\itshape below} the figure.
-
-Every figure should also have a figure description unless it is purely
-decorative. These descriptions convey what’s in the image to someone
-who cannot see it. They are also used by search engine crawlers for
-indexing images, and when images cannot be loaded.
-
-A figure description must be unformatted plain text less than 2000
-characters long (including spaces).  {\bfseries Figure descriptions
-  should not repeat the figure caption – their purpose is to capture
-  important information that is not already provided in the caption or
-  the main text of the paper.} For figures that convey important and
-complex new information, a short text description may not be
-adequate. More complex alternative descriptions can be placed in an
-appendix and referenced in a short figure description. For example,
-provide a data table capturing the information in a bar chart, or a
-structured list representing a graph.  For additional information
-regarding how best to write figure descriptions and why doing this is
-so important, please see
-\url{https://www.acm.org/publications/taps/describing-figures/}.
-
 \subsection{Key Observations}
-Summarize significant findings without interpreting them in depth—save interpretation for the Discussion section (unless Results and Discussion are combined).
-
-\subsection{Statistical or Thematic Findings}
-Report p-values, effect sizes, confidence intervals, or themes, depending on methodology.
+Community detection is able to reflect the cosine similarities discovered by the heatmap, but also reveals patterns that are not at first obvious. Graphs which have the most clear clustering include audio signals
+where the groups are very clearly different from each other. A higher k value will result in a more general differenitation (ie speech verses music), while a lower k value will reveal more nuanced details.
 
 \section{Discussion}
 
 \subsection{Interpretation of Results}
-Connect your findings to your original research questions. Explain how the results support or challenge existing literature/theories.
+This research reveals that graphs can be an effective tool for genre classification. The patterns observed in the heatmap became more apparent and amplified as the audio was graphed. The graph provided a "sliding scale" of audio types, shifting from one type to another throughout the graph, with the most dissimilar audio types on opposite ends.
+
+The mixed audio dataset grouped speech and music on oppoite ends. This is expected, as speech and music often take on very different spectral representations. Singing was placed in between, leaning closer to speech, but with the rhytimc elements of music samples. These patterns are discovered by the audio embedding, and revealed in the graph structure.
+A low k value was more discerning, by creating more communities, while a higher k value revealed more general patterns.
+
+The communitiy detection on the music dataset grouped similar music genres together. R&B and hip-hop were grouped together at one end of the graph. This result is not surprising, because hip-hop was born out of rapping over R&B beats. They often have very similar production styles and beats. Towards the middle of the graph, rock and country were grouped
+together. Again, these are two music genres which are very similar, and contain many similar elements. The other far extreme of the graph contains two heavy, electronic pop songs, which sound very dissimilar to the red of the dataset. These songs have fewer edges than the rest of the dataset, because they were the edges trimmed by the threshold. In between
+this community and the rock/country community, there is a "transition" community of mainly pop and rock. The heavier pop songs are connected to this community through heavy rock songs. This graph provides and interesting view of genre as not a binary classification, but instead a specturm. Although songs may be different genres, such as R&B and hip-hop,
+the graph structure reveals similarities between them that are backed up by the historical factors of these genres. 
 
 \subsection{Implications}
-Discuss practical, theoretical, or policy implications. Show how your work advances knowledge in the field.
+These results have implications in the field of audio classification and music detection. By leveraging graph properties, a more detailed picture of an audio
+sample can be painted. Audio classification is often not a binary decision, as audio signals are often composed of multiple different parts (ie, singing and instrumental music, and music sample which takes inspiration of multiple genres, etc.)
+Graphing these signals can reveal patterns and connections which may not be obvious by simply looking a single value.
 
 \subsection{Limitations}
-Acknowledge constraints such as sample size, method-specific limitations, or biases. Suggest how these limitations affect interpretation and generalizability.
+This study was greatly limited by a small sample size. It is difficult to draw conclusions from two small datasets. One other limitation of this study was the community detection algorithm selected. The Leiden algorithm works by maximizing modularity,
+which is computed based on the ratio of edges "in" the community verses edges "out" of the community. Because each node is forced to have k edges, this means edges may be added to somewhat dissimilar audio signals, especially for audio signal that are
+unique, or when the k-value exceeds the number of samples in a given community. This is handled sightly by the threshold, which removed the bottom 30\% of edges, but it may be more effective to determine a constant value that the cosine similarity must reach before an edge is added between two nodes. This may remove more
+"out" edges, and may be an effective way to seperate audio which is similar but should still be in different communities (ie, speech and singing)
 
 \subsection{Suggestions for Future Research}
-Propose follow-up studies or alternative methods that address unanswered questions.
+The first step to expand this research is collect more audio samples. Additionally, it would be beenficial to dive deeper into the exact audio signals and why they were grouped where.
+For example, examining the signal structure of an incorrectly classified sound, or listening to a music sample on the edge of two communities to determine if it might fit into both.
+It would also be worth comparing to another metric, such as the Mel-frequency cepstral coefficient, used model human hearing, to numerically determine if audio that is grouped together
+sounds similar to the human ear.
+
+Finally, determining a song's genre is often a difficult task, open to discrestion and interpretation. Many songs fit into more than one category. This research grouped songs into only one
+genre, based on what is considered the dominating genre. However, labelling songs with a more nuanced view of genre (ie, including mutliple genres on one song) could provide extra explanations
+for the edges added and the communities detected.
 
 \section{Conclusion}
 
-\begin{itemize}[noitemsep]
-  \item Summary of Main Findings: Recap key points succinctly.
-  \item Research Contribution: Reiterate how the study fills the identified gap.
-  \item Closing Thoughts: Provide a final reflection on the significance and potential impact of your research.
-\end{itemize}
+  The research took advantage of graph structure to expand audio classification with audio embeddings. The results of this study show that graphs
+can reveal patterns between audio that are not immedeatly obvious, but expand upon the idea of audio classification benig a binary task. Graph
+clustering algorithms were shown to be an effective way to find groups of similar audio signals.
 
-We're no strangers to love. You know the rules and so do I. A full commitment's what I'm thinking of. You wouldn't get this from any other guy. I just wanna tell you how I'm feeling. Gotta make you understand.
+  This research adds to the field of audio classification by exploring a new method of finding similar audio samples. Audio and genre classification is
+important and rapidly evolving. This reserach shows that taking advantage of machine learning and graph theory can expand audio classification from a binary
+to a sliding scale.
 
-Never gonna give you up. Never gonna let you down. Never gonna run around and desert you. Never gonna make you cry. Never gonna say goodbye. Never gonna tell a lie and hurt you.
-
-We've known each other for so long. Your heart's been aching, but you're too shy to say it. Inside, we both know what's been going on. We know the game and we're gonna play it. And if you ask me how I'm feeling. Don't tell me you're too blind to see.
-
-Never gonna give you up. Never gonna let you down. Never gonna run around and desert you. Never gonna make you cry. Never gonna say goodbye. Never gonna tell a lie and hurt you.
+  Although this research was limited in its scope and size, expanding upon it could reveal interesting results and new methods of audio classification.
+These methods could be used as a base for a Graph Neural Network to find songs that sound similar, strip vocals from music, determine the genres of a song, or group audio samples into similar
+groups.
 
 \medskip
 
